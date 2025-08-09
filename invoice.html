@@ -22,18 +22,33 @@ async function loadInvoice() {
   const id = params.get("id");
 
   // Link Web App Script đã deploy
-  const apiURL = "https://script.google.com/macros/s/AKfycbxZsBRVvZtsPAKwjQPRZz2Ql4Bjm3uTGkap885mbTwEIzHjKuEENSwNZudcpEUxfWMFQw/exec?id=" + encodeURIComponent(id);
+  const apiURL = "https://script.google.com/macros/s/AKfycbzY4Ie3HuLUFtnekfJJwY85YQrU9RIwqS7oy2NAwDPyElmvbZ1VZkihUy8Gn_MRvHH-UA/exec?id=" + encodeURIComponent(id);
 
   try {
     const res = await fetch(apiURL);
-    const data = await res.json();
 
-    if (!data.length) {
+    // Lấy raw text để debug
+    const text = await res.text();
+    console.log("Kết quả thô từ API:", text);
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (jsonErr) {
+      console.error("Lỗi parse JSON:", jsonErr);
+      document.getElementById("invoice").innerHTML = "Lỗi dữ liệu JSON từ API.";
+      return;
+    }
+
+    // Kiểm tra dữ liệu
+    if (!Array.isArray(data) || !data.length) {
       document.getElementById("invoice").innerHTML = "Không tìm thấy hóa đơn.";
       return;
     }
 
     const order = data[0];
+    console.log("Dữ liệu order:", order);
+
     document.getElementById("invoice").innerHTML = `
       <div class="header">
         <h2>HÓA ĐƠN ĐẶT HÀNG</h2>
@@ -42,10 +57,10 @@ async function loadInvoice() {
         <p>Điện thoại: (012) 345-6789</p>
       </div>
       <hr>
-      <p><strong>Mã Đơn Hàng:</strong> ${order.MaDon}</p>
+      <p><strong>Mã Đơn Hàng:</strong> ${order.MaDon || ""}</p>
       <p><strong>Ngày Đặt Hàng:</strong> ${order.ThoiGianSatHach || ""}</p>
-      <p><strong>Tên Khách Hàng:</strong> ${order.TenKhachHang}</p>
-      <p><strong>Địa Chỉ Giao Hàng:</strong> ${order.DiaChi}</p>
+      <p><strong>Tên Khách Hàng:</strong> ${order.TenKhachHang || ""}</p>
+      <p><strong>Địa Chỉ Giao Hàng:</strong> ${order.DiaChi || ""}</p>
       <table>
         <tr>
           <th>STT</th>
@@ -56,18 +71,19 @@ async function loadInvoice() {
         </tr>
         <tr>
           <td>1</td>
-          <td>${order.LoaiGPLX}</td>
+          <td>${order.LoaiGPLX || ""}</td>
           <td>1</td>
-          <td>${order.PhiThu}</td>
-          <td>${order.PhiThu}</td>
+          <td>${order.PhiThu || ""}</td>
+          <td>${order.PhiThu || ""}</td>
         </tr>
       </table>
-      <p class="total">Tổng cộng: ${order.PhiThu} VND</p>
+      <p class="total">Tổng cộng: ${order.PhiThu || ""} VND</p>
       <div class="footer">
         <p>Cảm ơn quý khách đã đặt hàng!</p>
       </div>
     `;
   } catch (err) {
+    console.error("Lỗi khi tải:", err);
     document.getElementById("invoice").innerHTML = "Lỗi tải dữ liệu.";
   }
 }
@@ -77,6 +93,3 @@ loadInvoice();
 
 </body>
 </html>
-
-
-
