@@ -22,7 +22,7 @@ async function loadInvoice() {
   const id = params.get("id");
 
   // Thay link Google Script API của bạn vào đây
-  const apiURL = "https://script.google.com/macros/s/AKfycbw6zDevsWAKSU8HOEF16IFHjRUMlCxBlGbEF8YjjZvW3hGCp_kWXhwU52boWqwmjWOHOg/exec" + id;
+  const apiURL = "https://script.google.com/macros/s/AKfycbxZsBRVvZtsPAKwjQPRZz2Ql4Bjm3uTGkap885mbTwEIzHjKuEENSwNZudcpEUxfWMFQw/exec" + id;
 
   try {
     const res = await fetch(apiURL);
@@ -76,4 +76,5 @@ loadInvoice();
 </script>
 </body>
 </html>
+
 
