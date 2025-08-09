@@ -22,7 +22,7 @@ async function loadInvoice() {
   const id = params.get("id");
 
   // Link Web App Script đã deploy
-  const apiURL = "https://script.google.com/macros/s/AKfycbzY4Ie3HuLUFtnekfJJwY85YQrU9RIwqS7oy2NAwDPyElmvbZ1VZkihUy8Gn_MRvHH-UA/exec?id=" + encodeURIComponent(id);
+  const apiURL = "https://script.google.com/macros/s/AKfycbyYGGKSaRF8tKOO29mnTs8ewAmVh2vOS8iBveLgVlldVmP15WYFb7luYhs0TIhUGpFPXg/exec?id=" + encodeURIComponent(id);
 
   try {
     const res = await fetch(apiURL);
@@ -93,3 +93,4 @@ loadInvoice();
 
 </body>
 </html>
+
